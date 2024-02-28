@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import './App.css'
 
 function App() {
@@ -6,6 +6,9 @@ function App() {
   const [numberAllowed, setNumberAllowed] = useState(false);
   const [charAllowed, setCharAllowed] = useState(false);
   const [password, setPassword] = useState("");
+
+  //useRef hook - here, default value is null
+  const passwordRef = useRef(null)
 
   const passwordGenerator = useCallback(() => {
     let pass = ""
@@ -21,7 +24,14 @@ function App() {
     setPassword(pass)
     
   },[length, numberAllowed, charAllowed, setPassword])
+
+  const copyPasswordToClickboard = useCallback(() => {
+    passwordRef.current?.select();
+    passwordRef.current?.setSelectionRange(0,length)
+    window.navigator.clipboard.writeText(password)
+  }, [password])
   
+  //here, to call the passwordGenerator function we use useEffect hook and any change happens to the dependencieswill also call the function
   useEffect(() => {passwordGenerator()}, [length, numberAllowed, charAllowed, passwordGenerator])
 
   return (
@@ -41,9 +51,11 @@ function App() {
             value={password}
             className="outline-none w-full py-1 px-3"
             placeholder="Password"
-            readOnly  
+            readOnly
+            ref={passwordRef}  
         />
         <button
+        onClick={copyPasswordToClickboard}
         className='outline-none bg-blue-700 text-white px-3 py-0.5 shrink-0'
         >copy</button>
       </div>
