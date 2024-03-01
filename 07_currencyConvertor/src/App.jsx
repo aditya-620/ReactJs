@@ -8,7 +8,7 @@ function App() {
 
   return (
     <>
-      <h1 className='text-4xl text-orange-500 bg-slate-100 '>currency convertor</h1>
+      <h1 className='text-8xl text-red-600'>curency convertor</h1>
     </>
   )
 }
